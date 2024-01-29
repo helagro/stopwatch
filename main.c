@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define SECONDS_SLEEP 0
+#define SECONDS_SLEEP 1
 #define MAX_SECS      359999
 
 unsigned int i;
