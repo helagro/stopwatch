@@ -3,21 +3,27 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#define SECONDS_SLEEP 0
+#define MAX_SECS      359999
+
 unsigned int i;
 
 void printPadded(unsigned char num) {
-    if (num < 10) putchar('0');
-
-    printf("%hhu", num);
+    if (num < 10) {
+        putchar('0');
+        putchar(num + '0');
+    } else {
+        printf("%hhu", num);
+    }
 }
 
 void printTime() {
     printPadded(i / 3600);   // hours
-    printf(":");
+    putchar(':');
     printPadded((i / 60) % 60);   // minutes
-    printf(":");
+    putchar(':');
     printPadded(i % 60);   // seconds
-    printf(" ");
+    putchar(' ');
     fflush(stdout);
 }
 
@@ -27,11 +33,11 @@ void printFinal() {
     printf("\nMinutes: %u\n", i / 60);
 }
 
-void *runTimer(void *arg) {
-    for (i = 0; i < 216000; i++) {
+void *timer(void *arg) {
+    for (i = 0; i < MAX_SECS; i++) {
         printTime();
 
-        sleep(0);
+        sleep(SECONDS_SLEEP);
         printf("\033[2K\033[G");   // clears line
     }
 
@@ -52,14 +58,12 @@ void listenForQuit() {
 int main() {
     pthread_t thread;
 
-    if (pthread_create(&thread, NULL, runTimer, NULL)) {
+    if (pthread_create(&thread, NULL, timer, NULL)) {
         fprintf(stderr, "Error creating thread\n");
         return 1;
     }
-
     listenForQuit();
 
     printFinal();
-
     return 0;
 }
