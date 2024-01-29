@@ -1,40 +1,42 @@
-#include <limits.h>
 #include <pthread.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
-unsigned long i;
+unsigned int i;
 
-void printPadded(unsigned long num) {
-    if (num < 10) {
-        printf("0");
-    }
+void printPadded(unsigned char num) {
+    if (num < 10) putchar('0');
 
-    printf("%lu", num);
+    printf("%hhu", num);
 }
 
 void printTime() {
-    unsigned long hours = i / 3600;
-    unsigned long minutes = (i / 60) % 60;
-    unsigned long secs = i % 60;
-
-    printPadded(hours);
+    printPadded(i / 3600);   // hours
     printf(":");
-    printPadded(minutes);
+    printPadded((i / 60) % 60);   // minutes
     printf(":");
-    printPadded(secs);
+    printPadded(i % 60);   // seconds
     printf(" ");
     fflush(stdout);
+}
+
+void printFinal() {
+    printf("\033[2K\033[G");   // clears line
+    printTime();
+    printf("\nMinutes: %u\n", i / 60);
 }
 
 void *runTimer(void *arg) {
     for (i = 0; i < 216000; i++) {
         printTime();
 
-        sleep(1);
-
-        printf("\033[2K\033[G");
+        sleep(0);
+        printf("\033[2K\033[G");   // clears line
     }
+
+    printFinal();
+    exit(0);
 
     return NULL;
 }
@@ -57,9 +59,7 @@ int main() {
 
     listenForQuit();
 
-    printf("\033[2K\033[G");
-    printTime();
-    printf("\nMinutes: %lu\n", i / 60);
+    printFinal();
 
     return 0;
 }
