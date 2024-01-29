@@ -1,10 +1,9 @@
 #include <limits.h>
 #include <pthread.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 
-char run = 1;
+unsigned long i;
 
 void printPadded(unsigned long num) {
     if (num < 10) {
@@ -14,10 +13,10 @@ void printPadded(unsigned long num) {
     printf("%lu", num);
 }
 
-void printTime(unsigned long seconds) {
-    unsigned long hours = seconds / 3600;
-    unsigned long minutes = (seconds / 60) % 60;
-    unsigned long secs = seconds % 60;
+void printTime() {
+    unsigned long hours = i / 3600;
+    unsigned long minutes = (i / 60) % 60;
+    unsigned long secs = i % 60;
 
     printPadded(hours);
     printf(":");
@@ -28,41 +27,39 @@ void printTime(unsigned long seconds) {
     fflush(stdout);
 }
 
-void runTimer() {
-    unsigned long i;
-
-    for (i = 0; run && i < 216000; i++) {
-        printTime(i);
+void *runTimer(void *arg) {
+    for (i = 0; i < 216000; i++) {
+        printTime();
 
         sleep(1);
-        system("clear");
+
+        printf("\033[2K\033[G");
     }
 
-    printTime(i);
-    printf("\nMinutes: %lu\n", i / 60);
+    return NULL;
 }
 
-void *listenForQuit(void *arg) {
+void listenForQuit() {
     char c;
 
     do {
         c = getchar();
     } while (c != 'q' && c != EOF);
-
-    run = 0;
-
-    return NULL;
 }
 
 int main() {
     pthread_t thread;
 
-    if (pthread_create(&thread, NULL, listenForQuit, NULL)) {
+    if (pthread_create(&thread, NULL, runTimer, NULL)) {
         fprintf(stderr, "Error creating thread\n");
         return 1;
     }
 
-    runTimer();
+    listenForQuit();
+
+    printf("\033[2K\033[G");
+    printTime();
+    printf("\nMinutes: %lu\n", i / 60);
 
     return 0;
 }

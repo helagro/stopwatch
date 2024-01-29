@@ -8,3 +8,4 @@ SpacesBeforeTrailingComments: 3
 AlignConsecutiveMacros: Consecutive
 IndentCaseLabels: true
 AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: true
