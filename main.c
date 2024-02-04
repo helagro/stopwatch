@@ -1,12 +1,13 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <unistd.h>
 
 #define SECONDS_SLEEP 1
 #define MAX_SECS      359999
 
-unsigned int i;
+time_t start;
 
 void printPadded(unsigned char num) {
     if (num < 10) {
@@ -17,12 +18,18 @@ void printPadded(unsigned char num) {
     }
 }
 
+unsigned int sec() {
+    return time(NULL) - start;
+}
+
 void printTime() {
-    printPadded(i / 3600);   // hours
+    unsigned int s = sec();
+
+    printPadded(s / 3600);   // hours
     putchar(':');
-    printPadded((i / 60) % 60);   // minutes
+    printPadded((s / 60) % 60);   // minutes
     putchar(':');
-    printPadded(i % 60);   // seconds
+    printPadded(s % 60);   // seconds
     putchar(' ');
     fflush(stdout);
 }
@@ -30,11 +37,11 @@ void printTime() {
 void printFinal() {
     printf("\033[2K\033[G");   // clears line
     printTime();
-    printf("\nMinutes: %u\n", i / 60);
+    printf("\nMinutes: %u\n", sec() / 60);
 }
 
 void *timer(void *arg) {
-    for (i = 0; i < MAX_SECS; i++) {
+    for (unsigned int i = 0; i < MAX_SECS; i++) {
         printTime();
 
         sleep(SECONDS_SLEEP);
@@ -57,6 +64,8 @@ void listenForQuit() {
 
 int main() {
     pthread_t thread;
+
+    time(&start);
 
     if (pthread_create(&thread, NULL, timer, NULL)) {
         fprintf(stderr, "Error creating thread\n");
