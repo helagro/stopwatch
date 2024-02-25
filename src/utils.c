@@ -1,0 +1,36 @@
+#pragma once
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+time_t start;
+
+void printPadded(unsigned char num) {
+    if (num < 10) {
+        putchar('0');
+        putchar(num + '0');
+    } else {
+        printf("%hhu", num);
+    }
+}
+
+unsigned int sec() {
+    return time(NULL) - start;
+}
+
+void printTime(unsigned int offset) {
+    unsigned int s = abs(((int) offset) - ((int) sec()));
+
+    printPadded(s / 3600);   // hours
+    putchar(':');
+    printPadded((s / 60) % 60);   // minutes
+    putchar(':');
+    printPadded(s % 60);   // seconds
+    putchar(' ');
+    fflush(stdout);
+}
+
+time_t sleepTime() {
+    return time(NULL) % 1000;
+}
