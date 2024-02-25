@@ -1,3 +1,4 @@
+#include "notify.c"
 #include "utils.c"
 #include "values.h"
 #include <stdio.h>
@@ -36,6 +37,8 @@ void *timer(void *arg) {
     }
 
     printTime(secs);
+    displayNotification();
+    playSound();
 
     exit(0);
 

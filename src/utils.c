@@ -1,8 +1,10 @@
 #pragma once
 
+#include "values.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 
 time_t start;
 
@@ -33,4 +35,25 @@ void printTime(unsigned int offset) {
 
 time_t sleepTime() {
     return time(NULL) % 1000;
+}
+
+char getFolder(char *output) {
+    const int s = MAX_PATH_LENGTH;
+
+    if (_NSGetExecutablePath(output, &s) == 0) {
+        unsigned int i = 0;
+
+        for (; i < s && output[i] != '\0'; i++)
+            ;
+
+        for (; i > 0; i--) {
+            if (output[i] == '/') {
+                output[i] = '\0';
+                return 1;
+            }
+        }
+    }
+
+    fprintf(stderr, "Error getting folder\n");
+    return 0;
 }
