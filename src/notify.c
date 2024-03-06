@@ -10,7 +10,7 @@ _Bool getCommand(char *output) {
     char folder[MAX_PATH_LENGTH];
     if (!getFolder(folder)) return 0;
 
-    sprintf(output, "afplay %s/funk.mp3", folder);
+    sprintf(output, "afplay %s/funk.wav", folder);
     return 1;
 }
 
