@@ -29,7 +29,7 @@ void *timer(void *arg) {
     char *time = (char *) arg;
     unsigned long secs = parseTime(time);
 
-    for (unsigned int i = 0; i < secs; i++) {
+    for (unsigned int i = 0; i < secs; i = sec()) {
         printTime(secs);
 
         sleep(SECONDS_SLEEP);
