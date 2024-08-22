@@ -41,5 +41,5 @@ int main(int argc, char *argv[]) {
     listenForQuit();
 
     printFinal();
-    return 0;
+    return 2;
 }
