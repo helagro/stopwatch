@@ -30,10 +30,13 @@ void *timer(void *arg) {
     unsigned long secs = parseTime(time);
 
     for (unsigned int i = 0; i < secs; i = sec()) {
+        printf("Elapsed:   ");
+        printTime(0);
+        printf("\nRemaining: ");
         printTime(secs);
 
         sleep(SECONDS_SLEEP);
-        printf("\033[2K\033[G");   // clears line
+        printf("\033[2K\033[1A\033[2K\033[G");   // clears lines
     }
 
     printTime(secs);
