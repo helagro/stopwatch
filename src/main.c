@@ -13,6 +13,8 @@ void listenForQuit() {
     do {
         c = getchar();
     } while (c != 'q' && c != EOF);
+
+    putchar('\n');
 }
 
 int main(int argc, char *argv[]) {

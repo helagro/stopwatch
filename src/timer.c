@@ -43,6 +43,8 @@ void *timer(void *arg) {
     }
 
     printStatus(secs);
+    putchar('\n');
+
     displayNotification();
     playSound();
 

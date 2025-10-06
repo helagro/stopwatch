@@ -14,6 +14,8 @@ void *stopwatch(void *arg) {
         printf("\033[2K\033[G");   // clears line
     }
 
+    putchar('\n');
+
     exit(0);
 
     return NULL;
