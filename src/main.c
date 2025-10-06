@@ -21,17 +21,11 @@ int main(int argc, char *argv[]) {
     char *time;
     void *(*fun)(void *);
 
-    switch (argc) {
-        case 1:
-            fun = stopwatch;
-            break;
-        case 2:
-            fun = timer;
-            time = argv[1];
-            break;
-        default:
-            fprintf(stderr, "No argument for stopwatch, one argument for timer\n");
-            return 1;
+    if (argc == 1) {
+        fun = stopwatch;
+    } else {
+        fun = timer;
+        time = argv[1];
     }
 
     if (pthread_create(&thread, NULL, fun, time)) {
@@ -40,6 +34,5 @@ int main(int argc, char *argv[]) {
     }
     listenForQuit();
 
-    printFinal();
     return 2;
 }

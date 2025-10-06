@@ -6,12 +6,6 @@
 
 #define MAX_SECS 359999
 
-void printFinal() {
-    printf("\033[2K\033[G");   // clears line
-    printTime(0);
-    printf("\nMinutes: %u\n", sec() / 60);
-}
-
 void *stopwatch(void *arg) {
     for (unsigned int i = 0; i < MAX_SECS; i++) {
         printTime(0);
@@ -20,7 +14,6 @@ void *stopwatch(void *arg) {
         printf("\033[2K\033[G");   // clears line
     }
 
-    printFinal();
     exit(0);
 
     return NULL;
